@@ -3,18 +3,20 @@ import liginSignUpImage from "../assets/SignInGreenzon-removebg-preview.png";
 import { Link, useNavigate } from "react-router-dom";
 import { BiShow, BiHide } from "react-icons/bi";
 import { useState } from "react";
-import {ImageToBase64String} from '../utilities/imageToBase64'
+import { ImageToBase64String } from "../utilities/imageToBase64";
+import { toast } from "react-hot-toast";
+
 const SignUp = () => {
-    const navigate = useNavigate()
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [data,setData] = useState({
+  const [data, setData] = useState({
     lastName: "",
     firstName: "",
     email: "",
     password: "",
     confirmPassword: "",
-    image : "",
+    image: "",
   });
   //console.log(data);
   const handleShowPassword = () => {
@@ -24,57 +26,83 @@ const SignUp = () => {
     setShowConfirmPassword((prev) => !prev);
   };
   const handleOnChange = (event) => {
-    const {name,value} = event.target
-    setData((prev)=>{
-        return {
-            ...prev,
-            [name]: value,
-            
-
-        }
-
-    })
+    const { name, value } = event.target;
+    setData((prev) => {
+      return {
+        ...prev,
+        [name]: value,
+      };
+    });
   };
   const handleUploadProfilImage = async (e) => {
-        //console.log(e.target.files[0])
-        const data = await ImageToBase64String(e.target.files[0])
-        console.log(data)
-        setData((prev) => {
-            return {
-                ...prev,
-                image: data
-            }
-        })
+    //console.log(e.target.files[0])
+    const data = await ImageToBase64String(e.target.files[0]);
+    console.log(data);
+    setData((prev) => {
+      return {
+        ...prev,
+        image: data,
+      };
+    });
   };
-
-  const handleSubmit = (event) => {
+  //console.log(process.env.REACT_APP_SERVER_DOMAIN);
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    const {firstName,email,password,confirmPassword} = data;
-    if (firstName && email && password && confirmPassword){
-        if(password === confirmPassword){
-            alert("Succes");
-            navigate("/login")
-        }else {
-            alert("Les mots de passe ne sont pas identiques");
+    const { firstName, email, password, confirmPassword } = data;
+    if (firstName && email && password && confirmPassword) {
+      if (password === confirmPassword) {
+        const fetchData = await fetch(
+          `${process.env.REACT_APP_SERVER_DOMAIN}/signup`,
+          {
+            method: "POST",
+            headers: { "content-type": "application/json" },
+            body: JSON.stringify(data),
+          }
+        );
+        const dataResponse = await fetchData.json();
+        //console.log(dataResponse)
+        toast(dataResponse.message);
+        if (dataResponse.alert) {
+          setTimeout(() => {
+            navigate("/login");
+          },1000)
+          
         }
-    }else {
-        alert("Entrez un mot de passe !")
-    } 
+      } else {
+        alert("Les mots de passe ne sont pas identiques");
+      }
+    } else {
+      alert("Entrez un mot de passe !");
+    }
   };
   return (
     <div className="p-3 md:p-4">
       <div className="w-full max-w-md  m-auto flex justify-center flex-col items-center p-4  bg-green-700 rounded-md mt-5">
         {/* <h1 className='text-center text-2xl font-bold'>Sign Up</h1> */}
         <div className=" bg-green-700 w-40 h-40 overflow-hidden rounded-full drop-shadow-md m-auto relative ">
-          <img src={data.image ? data.image : liginSignUpImage} alt="" className="w-full h-full" />
+          <img
+            src={data.image ? data.image : liginSignUpImage}
+            alt=""
+            className="w-full h-full"
+          />
         </div>
         <label htmlFor="profileImage">
           <div className=" text-[0.7em] p-[0.3em] mt-3 text-white font-semibold shadow-md bg-yellow-500 rounded-md cursor-pointer">
             <p>Ajouter une photo</p>
           </div>
-          <input type={"file"} id="profileImage" className="hidden" onChange={handleUploadProfilImage} accept="image/*" />
-          </label>
-        <form className="w-full flex flex-col gap-4 py-3" action="" onSubmit={handleSubmit}>
+          <input
+            type={"file"}
+            id="profileImage"
+            className="hidden"
+            onChange={handleUploadProfilImage}
+            accept="image/*"
+          />
+        </label>
+        <form
+          className="w-full flex flex-col gap-4 py-3"
+          action=""
+          onSubmit={handleSubmit}
+        >
           <div>
             <label className="text-white font-bold" htmlFor="lastName">
               Nom
@@ -164,9 +192,16 @@ const SignUp = () => {
               </span>
             </div>
           </div>
-          <button className=" w-full max-w-[150px] m-auto text-xl text-white font-bold mt-4 p-1 bg-yellow-500 hover:bg-yellow-600 rounded-md">S'inscrire</button>
+          <button className=" w-full max-w-[150px] m-auto text-xl text-white font-bold mt-4 p-1 bg-yellow-500 hover:bg-yellow-600 rounded-md">
+            S'inscrire
+          </button>
         </form>
-        <p className="text-white mt-2 font-semibold">Déjà inscrit·e ? <Link className="text-yellow-500 underline" to={"/login"}>Connexion</Link></p>
+        <p className="text-white mt-2 font-semibold">
+          Déjà inscrit·e ?{" "}
+          <Link className="text-yellow-500 underline" to={"/login"}>
+            Connexion
+          </Link>
+        </p>
       </div>
     </div>
   );
