@@ -65,8 +65,8 @@ const SignUp = () => {
     <div className="p-3 md:p-4">
       <div className="w-full max-w-md  m-auto flex justify-center flex-col items-center p-4  bg-green-700 rounded-md mt-5">
         {/* <h1 className='text-center text-2xl font-bold'>Sign Up</h1> */}
-        <div className=" bg-green-700 w-40 overflow-hidden rounded-full drop-shadow-md m-auto relative ">
-          <img src={data.image ? data.image : liginSignUpImage} alt="" className="w-full" />
+        <div className=" bg-green-700 w-40 h-40 overflow-hidden rounded-full drop-shadow-md m-auto relative ">
+          <img src={data.image ? data.image : liginSignUpImage} alt="" className="w-full h-full" />
         </div>
         <label htmlFor="profileImage">
           <div className=" text-[0.7em] p-[0.3em] mt-3 text-white font-semibold shadow-md bg-yellow-500 rounded-md cursor-pointer">
