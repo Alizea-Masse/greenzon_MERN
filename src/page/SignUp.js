@@ -145,7 +145,7 @@ const SignUp = () => {
           </div>
           <button className=" w-full max-w-[150px] m-auto text-xl text-white font-bold mt-4 p-1 bg-yellow-500 hover:bg-yellow-600 rounded-md">S'inscrire</button>
         </form>
-        <p className="text-white mt-2 font-semibold">Déjà inscrit ? <Link className="text-yellow-500 underline" to={"login"}>Connexion</Link></p>
+        <p className="text-white mt-2 font-semibold">Déjà inscrit·e ? <Link className="text-yellow-500 underline" to={"/login"}>Connexion</Link></p>
       </div>
     </div>
   );
