@@ -4,9 +4,12 @@ import { Link } from "react-router-dom";
 import { HiOutlineUserCircle } from "react-icons/hi";
 import { BsCartFill } from "react-icons/bs";
 import { useState } from "react";
+import { useSelector } from "react-redux";
 
 const Header = () => {
   const [showMenu, setShowMenu] = useState(false);
+  const userData = useSelector((state)=> state.user)
+  console.log("coucou",userData.image)
   
   const handleShowMenu = () =>{
     setShowMenu(preve => !preve);
@@ -35,7 +38,10 @@ const Header = () => {
           </div>
           <div className="text-slate-600" onClick={handleShowMenu}>
             <div  className="text-4xl cursor-pointer text-white">
-              <HiOutlineUserCircle />
+
+              {userData.image ? <img className="w-10 h-10" src={userData.image} alt="profil"/> : <HiOutlineUserCircle/> 
+              
+              }
             </div>
             {showMenu && (
               <div className="absolute right-0 bg-white py-3 px-2 mt-3  shadow drop-shadow-md flex flex-col">

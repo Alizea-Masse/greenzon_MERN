@@ -12,7 +12,7 @@ import {loginRedux} from '../redux/userSlice'
 const Login = () => {
   const navigate = useNavigate();
   const userData = useSelector((state) => state);
-  console.log(userData.user);
+
   const dispatch = useDispatch();
   const [showPassword, setShowPassword] = useState(false);
   const [data, setData] = useState({
@@ -47,7 +47,9 @@ const Login = () => {
         }
       );
       const dataResponse = await fetchData.json();
-      console.log(dataResponse);
+      
+      
+      
       toast(dataResponse.message);
       if (dataResponse.alert) {
         dispatch(loginRedux(dataResponse))
@@ -55,6 +57,7 @@ const Login = () => {
           navigate("/");
         }, 1000);
       }
+      console.log('################',userData);
     } else {
       alert("enter required fields");
     }
