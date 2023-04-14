@@ -5,15 +5,23 @@ import { HiOutlineUserCircle } from "react-icons/hi";
 import { BsCartFill } from "react-icons/bs";
 import { useState } from "react";
 import { useSelector } from "react-redux";
-
+import { useDispatch } from "react-redux";
+import {logoutRedux} from '../redux/userSlice'
+import { toast } from "react-hot-toast";
 const Header = () => {
+  const dispatch = useDispatch()
   const [showMenu, setShowMenu] = useState(false);
-  const userData = useSelector((state)=> state.user)
-  console.log("coucou",userData.image)
-  
-  const handleShowMenu = () =>{
-    setShowMenu(preve => !preve);
-  }
+  const userData = useSelector((state) => state.user);
+  //console.log("coucou", userData.image);
+
+  const handleShowMenu = () => {
+    setShowMenu((preve) => !preve);
+  };
+
+  const handleLogout = () => {
+    dispatch(logoutRedux())
+    toast("Vous êtes déconnecté·e")
+  };
   return (
     <header className="fixed shadow-md w-full h-16 px-2 md:px-4 z-50 bg-green-700 text-white">
       {/* desktop */}
@@ -37,18 +45,26 @@ const Header = () => {
             </div>
           </div>
           <div className="text-slate-600" onClick={handleShowMenu}>
-            <div  className="text-4xl cursor-pointer text-white">
-
-              {userData.image ? <img className="w-10 h-10" src={userData.image} alt="profil"/> : <HiOutlineUserCircle/> 
-              
-              }
+            <div className="text-4xl cursor-pointer text-white">
+              {userData.image ? (
+                <img className="w-10 h-10 rounded-full overflow-hidden shadow-md drop-shadow-md" src={userData.image} alt="profil" />
+              ) : (
+                <HiOutlineUserCircle />
+              )}
             </div>
             {showMenu && (
               <div className="absolute right-0 bg-white py-3 px-2 mt-3  shadow drop-shadow-md flex flex-col">
-                <Link to={"newproduct"} className="whitespace-nowrap cursor-pointer">
+                <Link
+                  to={"newproduct"}
+                  className="whitespace-nowrap cursor-pointer px-2 hover:bg-slate-300 rounded-sm"
+                >
                   Nouveau produit
                 </Link>
-                <Link to={"login"} className="whitespace-nowrap cursor-pointer">Se connecter</Link>
+                {userData.email ? <p onClick={handleLogout} className="whitespace-nowrap cursor-pointer px-2 text-red-700 hover:bg-slate-300 rounded-sm">
+                  Se déconnecter
+                </p> : <Link to={"login"} className="whitespace-nowrap cursor-pointer px-2 text-green-700 hover:bg-slate-300 rounded-sm">
+                  Se connecter
+                </Link>}
               </div>
             )}
           </div>
